@@ -12,9 +12,9 @@ type Hash func(data []byte) uint32
 // Map contains all hashed keys
 type Map struct {
 	hash     Hash
-	replicas int
-	keys     []int // Sorted
-	hashMap  map[int]string
+	replicas int            // 虚拟节点倍数
+	keys     []int          // Sorted，哈希环
+	hashMap  map[int]string // 虚拟节点与真实节点的映射表
 }
 
 // New creates a Map instance
@@ -61,4 +61,13 @@ func (m *Map) Get(key string) string {
 	// 如果 idx == len(m.keys)，说明应选择 m.keys[0]，
 	// 因为 m.keys 是一个环状结构，所以用取余数的方式来处理这种情况。
 	return m.hashMap[m.keys[idx%len(m.keys)]]
+}
+
+func (m *Map) Remove(key string) {
+	for i := 0; i < m.replicas; i++ {
+		hash := int(m.hash([]byte(strconv.Itoa(i) + key)))
+		idx := sort.SearchInts(m.keys, hash)
+		m.keys = append(m.keys[:idx], m.keys[idx+1:]...)
+		delete(m.hashMap, hash)
+	}
 }
