@@ -15,7 +15,7 @@ var db = map[string]string{
 }
 
 func createGroup() *ocache.Group {
-	return ocache.NewGroup("soures", 2<<10, ocache.GetterFunc(
+	return ocache.NewGroup("soures", 2<<10, 2, 30, ocache.GetterFunc(
 		func(key string) ([]byte, error) {
 			log.Println("[SlowDB] search key", key)
 			if v, ok := db[key]; ok {
