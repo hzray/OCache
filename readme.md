@@ -13,19 +13,6 @@ O-Cache的特性有
 
 
 
-### 代码结构
-
-```
-0cache/
-    |--lru/
-        |--lru.go  // lru 缓存淘汰策略
-    |--byteview.go // 缓存值的抽象与封装
-    |--cache.go    // 并发控制
-    |--ocache.go // 负责与外部交互，控制缓存存储和获取的主流程
-		|--http.go     // 提供被其他节点访问的能力(基于http)
-```
-
-
 
 ### 为什么采用LRU-K缓存策略 (package lru)
 
@@ -107,5 +94,5 @@ Group 是 O-Cache 最核心的数据结构，负责与用户的交互，并且�
 
 protobuf 广泛地应用于远程过程调用(RPC) 的二进制传输，使用 protobuf 的目的非常简单，为了获得更高的性能。传输前使用 protobuf 编码，接收方再进行解码，可以显著地降低二进制传输的大小。另外一方面，protobuf 可非常适合传输结构化数据，便于通信字段的扩展。
 
-
+### 参考：https://geektutu.com/post/geecache.html
 
